@@ -266,7 +266,7 @@ def build_obj_func(station, name, day, customer_count, prob):
     :param name: name of the station in lowercase
     :param day: day of a week
     :param customer_count: number of customers coming in at any given time
-    :param prob: probability of a customer go to any station an any time
+    :param prob: probability of a customer going to any station an any time
     :return: string representation of the final objective function
     """
     hours = station.get_hours(day)
