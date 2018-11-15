@@ -1,0 +1,7 @@
+Monday:156
+Tuesday:156
+Wednesday:156
+Thursday:156
+Friday:105.5
+Saturday:80.5
+Sunday:133.5

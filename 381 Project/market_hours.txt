@@ -1,0 +1,7 @@
+Monday:7,21
+Tuesday:7,21
+Wednesday:7,21
+Thursday:7,21
+Friday:7,21
+Saturday:8,21
+Sunday:8,21
