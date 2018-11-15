@@ -65,7 +65,7 @@ def load_prob(dict_list, filename):
                       Each dictionary maps a time to a probability
     :param filename: name of the file storing the data
     """
-    prob = open(filename)
+    prob = open("data/" + filename)
     i = 0
     for line in prob:
         values = line.split(",")
@@ -83,7 +83,7 @@ def load_customer_count(filename):
     :return: a dictionary maps from time of a day to number of customers coming in at that time
     """
     customer_count = {}
-    data = open(filename)
+    data = open("data/" + filename)
     i = 0
     for line in data:
         customer_count[7 + 0.25 * i] = int(line)
@@ -100,7 +100,7 @@ def load_hours(filename):
                  throughout the day. Each period of opening hours is a tuple in the form: (open_time, close_time)
     """
     hours = {}
-    data = open(filename)
+    data = open("data/" + filename)
     for line in data:
         day = line.split(":")[0]
         day_hours = line.split(":")[1].split()
@@ -119,7 +119,7 @@ def load_shifts(filename):
     :return: a list of shifts. Shifts are represented by tuples in the form: (start_time, end_time)
     """
     shifts = []
-    data = open(filename)
+    data = open("data/" + filename)
     for line in data:
         shift = line.rstrip().split(",")
         shifts.append((float(shift[0]), float(shift[1])))
@@ -134,7 +134,7 @@ def load_max_hours(filename):
     :return: a dictionary that maps a day of a week to the max hours
     """
     max_hours = {}
-    data = open(filename)
+    data = open("data/" + filename)
     for line in data:
         max_hours[line.split(":")[0]] = line.split(":")[1]
     data.close()
@@ -362,7 +362,7 @@ def interpret_result(model, day, all_shifts):
     :param all_shifts: map from index to a shift
     """
     model.optimize()
-    output = open(day + "_output.txt", "w")
+    output = open("data/" + day + "_output.txt", "w")
     hours_sum = 0
     for var in model.getVars():
         index = int(var.varName[1:])
