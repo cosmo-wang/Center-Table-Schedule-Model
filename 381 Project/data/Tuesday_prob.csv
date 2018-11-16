@@ -1,3 +1,8 @@
+# Probability that customers going to a
+# specific station at given time on Tuesdays.
+# Stations are in the order of:
+# Select, Seared, Market, Plate, Noodle, Quench.
+# Data starts from 7:00 AM, separated by 15 minutes.
 0.00,0.00,14.29,0.00,0.00,85.71
 0.00,0.00,16.67,0.00,0.00,83.33
 0.00,0.00,10.71,64.29,0.00,25.00

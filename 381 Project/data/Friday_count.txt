@@ -1,3 +1,6 @@
+# Number of customers coming to Center Table on Fridays.
+# Data starts from 7:00 AM in the morning.
+# each line represents number of customers coming during 15 minutes.
 3
 9
 30

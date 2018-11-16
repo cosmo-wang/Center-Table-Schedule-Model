@@ -68,10 +68,11 @@ def load_prob(dict_list, filename):
     prob = open("data/" + filename)
     i = 0
     for line in prob:
-        values = line.split(",")
-        for j in range(len(dict_list)):
-            dict_list[j][7 + 0.25 * i] = float(values[j]) / 100
-        i += 1
+        if not line.startswith("#"):
+            values = line.split(",")
+            for j in range(len(dict_list)):
+                dict_list[j][7 + 0.25 * i] = float(values[j]) / 100
+            i += 1
     prob.close()
 
 
@@ -86,8 +87,9 @@ def load_customer_count(filename):
     data = open("data/" + filename)
     i = 0
     for line in data:
-        customer_count[7 + 0.25 * i] = int(line)
-        i += 1
+        if not line.startswith("#"):
+            customer_count[7 + 0.25 * i] = int(line)
+            i += 1
     data.close()
     return customer_count
 
@@ -102,12 +104,13 @@ def load_hours(filename):
     hours = {}
     data = open("data/" + filename)
     for line in data:
-        day = line.split(":")[0]
-        day_hours = line.split(":")[1].split()
-        parsed_day_hours = []
-        for hour in day_hours:
-            parsed_day_hours.append((float(hour.split(",")[0]), float(hour.split(",")[1].rstrip())))
-        hours[day] = parsed_day_hours
+        if not line.startswith("#"):
+            day = line.split(":")[0]
+            day_hours = line.split(":")[1].split()
+            parsed_day_hours = []
+            for hour in day_hours:
+                parsed_day_hours.append((float(hour.split(",")[0]), float(hour.split(",")[1].rstrip())))
+            hours[day] = parsed_day_hours
     data.close()
     return hours
 
@@ -121,8 +124,9 @@ def load_shifts(filename):
     shifts = []
     data = open("data/" + filename)
     for line in data:
-        shift = line.rstrip().split(",")
-        shifts.append((float(shift[0]), float(shift[1])))
+        if not line.startswith("#"):
+            shift = line.rstrip().split(",")
+            shifts.append((float(shift[0]), float(shift[1])))
     data.close()
     return shifts
 
@@ -136,7 +140,8 @@ def load_max_hours(filename):
     max_hours = {}
     data = open("data/" + filename)
     for line in data:
-        max_hours[line.split(":")[0]] = line.split(":")[1]
+        if not line.startswith("#"):
+            max_hours[line.split(":")[0]] = line.split(":")[1]
     data.close()
     return max_hours
 
