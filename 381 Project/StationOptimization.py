@@ -9,7 +9,7 @@ import copy
 class Station:
     def __init__(self, station_name, hours, shifts, speed, max_wait_time):
         """
-        Create a new food station.
+        Create a new food station
         :param station_name: name of the station
         :param hours: opening hours of the station
         :param shifts: all possible shift of the station
