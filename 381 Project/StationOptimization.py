@@ -7,7 +7,7 @@ import copy
 
 
 class Station:
-    def __init__(self, station_name, hours, shifts, speed):
+    def __init__(self, station_name, hours, shifts, speed, max_wait_time):
         """
         Create a new food station.
         :param station_name: name of the station
@@ -19,6 +19,7 @@ class Station:
         self.hours = hours
         self.shifts = shifts
         self.speed = speed
+        self.max_wait_time = max_wait_time
 
     def get_name(self):
         """
@@ -56,6 +57,9 @@ class Station:
         :return: speed of serving customers at this station
         """
         return self.speed
+
+    def get_max_wait_time(self):
+        return self.max_wait_time
 
 
 def load_prob(dict_list, filename):
@@ -215,6 +219,33 @@ def between_one_and_four(station, day, name, model_name, constrs):
             constrs.add("%s.addConstr(%s >= 1)" % (model_name, constr_builder[:-3]))
             constrs.add("%s.addConstr(%s <= 4)" % (model_name, constr_builder[:-3]))
 
+def station_wait_time(station, day, name, customer_count, prob, model_name, constrs):
+    """
+    Add constraints to the model restricting the maximum wait time of any customer
+    going to that station.
+    :param station: station of interest
+    :param day: day of a week of interest
+    :param name: name of the station in lowercase
+    :param customer_count: list of customer count starting from 7:00, separated by 15 mins
+    :param prob: list of probability that a customer would go to a station
+    :param model_name: name of the model to add constraints on
+    :param constrs: set of constraints to add to
+    """
+    for hour in station.get_hours(day):
+        for time in separate_hour(hour):
+            cur_customer_num = customer_count[time]
+            cur_prob = prob[time]
+            is_on_list = list(map(lambda x: is_on(x, time), station.get_shifts()))
+            working_shift_builder = ""
+            for i in range(len(is_on_list)):
+                if is_on_list[i] == 1:
+                    working_shift_builder += name + "_x" + str(i) + " + "
+            speed = station.get_speed().replace("x", "(" + str(working_shift_builder[:-3]) + ")")
+            print time
+            print "%s.addConstr(%d * (%s) <= %d)" % (model_name, (cur_customer_num * cur_prob), speed, station.get_max_wait_time())
+            constrs.add("%s.addConstr(%d * (%s) <= %d)" % (model_name, (cur_customer_num * cur_prob), speed, station.get_max_wait_time()))
+
+
 
 def opening_closing_prep(station, day, name, model_name, constrs):
     """
@@ -228,21 +259,21 @@ def opening_closing_prep(station, day, name, model_name, constrs):
     :return:
     """
     for hour in station.get_hours(day):
+        print hour
         start = hour[0]
         end = hour[1]
         shifts = station.get_shifts()
+        opening_shifts_builder = ""
+        closing_shifts_builder = ""
         for i in range(len(shifts)):
-            if name == "quench":
-                if shifts[i][0] == start - 1:
-                    constrs.add("%s.addConstr(%s_x%d == 1)" % (model_name, name ,i))
-            elif name == "market":
-                if shifts[i][0] == 10.5:
-                    constrs.add("%s.addConstr(%s_x%d == 1)" % (model_name, name, i))
-            else:
-                if shifts[i][0] == start - 0.25:
-                    constrs.add("%s.addConstr(%s_x%d == 1)" % (model_name, name, i))
-            if shifts[i][1] == end + 0.5:
-                constrs.add("%s.addConstr(%s_x%d == 1)" % (model_name, name, i))
+            if -1 <= shifts[i][0] - start < 0:
+                opening_shifts_builder += name + "_x" + str(i) + " + "
+            if 0 < shifts[i][1] - end <= 0.5:
+                closing_shifts_builder += name + "_x" + str(i) + " + "
+        if not opening_shifts_builder == "":
+            constrs.add("%s.addConstr(%s <= 2)" % (model_name, opening_shifts_builder[:-3]))
+        if not closing_shifts_builder == "":
+            constrs.add("%s.addConstr(%s <= 2)" % (model_name, closing_shifts_builder[:-3]))
 
 
 def total_hours(stations, max_hours):
@@ -344,6 +375,7 @@ def optimizer(stations, day, model_name, max_hours, all_shifts):
         if stations[name].get_hours(day) is not None:
             between_one_and_four(stations[name], day, name, model_name, constrs)
             opening_closing_prep(stations[name], day, name, model_name, constrs)
+            station_wait_time(stations[name], day, name, customer_count, prob_dict[name], model_name, constrs)
             obj_func += build_obj_func(stations[name], name, day, customer_count, prob_dict[name])
 
     # Market opens later on Saturday and Sunday
@@ -357,7 +389,6 @@ def optimizer(stations, day, model_name, max_hours, all_shifts):
 
     # Add objective function
     eval("%s.setObjective(%s, GRB.MINIMIZE)" % (model_name, obj_func[:-3]))
-
 
 def interpret_result(model, day, all_shifts):
     """
@@ -384,19 +415,19 @@ def interpret_result(model, day, all_shifts):
 # ---------- Setting up Data ---------- #
 # Setting up data for all stations
 plate = Station("Plate", load_hours("plate_hours.txt"),
-                load_shifts("plate_shifts.txt"), "-0.2 * x + 1")
+                load_shifts("plate_shifts.txt"), "-0.2 * x + 1", 15)
 # -0.2 * x + 1.2
 quench = Station("Quench", load_hours("quench_hours.txt"),
-                load_shifts("quench_shifts.txt"), "-0.2 * x + 1.6")
+                load_shifts("quench_shifts.txt"), "-0.2 * x + 1.6", 20)
 noodle = Station("Noodle", load_hours("noodle_hours.txt"),
-                load_shifts("noodle_shifts.txt"), "-0.2 * x + 1.2")
+                load_shifts("noodle_shifts.txt"), "-0.2 * x + 1.2", 20)
 select = Station("Select", load_hours("select_hours.txt"),
-                load_shifts("select_shifts.txt"), "-0.2 * x + 1")
+                load_shifts("select_shifts.txt"), "-0.2 * x + 1", 15)
 market = Station("Market", load_hours("market_hours.txt"),
-                load_shifts("market_shifts.txt"), "-0.2 * x + 1.1")
+                load_shifts("market_shifts.txt"), "-0.2 * x + 1.1", 20)
 # -0.1 * x + 1.5
 seared = Station("Seared", load_hours("seared_hours.txt"),
-                load_shifts("seared_shifts.txt"), "-0.2 * x + 1")
+                load_shifts("seared_shifts.txt"), "-0.2 * x + 1", 20)
 # -0.2 * x + 1.6
 
 # A map from name of the station in string to the station's data in an object
@@ -409,34 +440,35 @@ all_stations = {"plate": plate, "quench": quench,
 m_model = Model()
 all_shifts = {}
 optimizer(all_stations, "Monday", "m_model", load_max_hours("max_hours.txt"), all_shifts)
+print all_shifts
 interpret_result(m_model, "Monday", all_shifts)
 
-# Optimize for Tuesday
-t_model = Model()
-optimizer(all_stations, "Tuesday", "t_model", load_max_hours("max_hours.txt"), all_shifts)
-interpret_result(t_model, "Tuesday", all_shifts)
-
-# Optimize for Wednesday
-w_model = Model()
-optimizer(all_stations, "Wednesday", "w_model", load_max_hours("max_hours.txt"), all_shifts)
-interpret_result(w_model, "Wednesday", all_shifts)
-
-# Optimize for Thursday
-th_model = Model()
-optimizer(all_stations, "Thursday", "th_model", load_max_hours("max_hours.txt"), all_shifts)
-interpret_result(th_model, "Thursday", all_shifts)
-
-# Optimize for Friday
-f_model = Model()
-optimizer(all_stations, "Friday", "f_model", load_max_hours("max_hours.txt"), all_shifts)
-interpret_result(f_model, "Friday", all_shifts)
-
-# Optimize for Saturday
-sa_model = Model()
-optimizer(all_stations, "Saturday", "sa_model", load_max_hours("max_hours.txt"), all_shifts)
-interpret_result(sa_model, "Saturday", all_shifts)
-
-# Optimize for Friday
-su_model = Model()
-optimizer(all_stations, "Sunday", "su_model", load_max_hours("max_hours.txt"), all_shifts)
-interpret_result(su_model, "Sunday", all_shifts)
+# # Optimize for Tuesday
+# t_model = Model()
+# optimizer(all_stations, "Tuesday", "t_model", load_max_hours("max_hours.txt"), all_shifts)
+# interpret_result(t_model, "Tuesday", all_shifts)
+#
+# # Optimize for Wednesday
+# w_model = Model()
+# optimizer(all_stations, "Wednesday", "w_model", load_max_hours("max_hours.txt"), all_shifts)
+# interpret_result(w_model, "Wednesday", all_shifts)
+#
+# # Optimize for Thursday
+# th_model = Model()
+# optimizer(all_stations, "Thursday", "th_model", load_max_hours("max_hours.txt"), all_shifts)
+# interpret_result(th_model, "Thursday", all_shifts)
+#
+# # Optimize for Friday
+# f_model = Model()
+# optimizer(all_stations, "Friday", "f_model", load_max_hours("max_hours.txt"), all_shifts)
+# interpret_result(f_model, "Friday", all_shifts)
+#
+# # Optimize for Saturday
+# sa_model = Model()
+# optimizer(all_stations, "Saturday", "sa_model", load_max_hours("max_hours.txt"), all_shifts)
+# interpret_result(sa_model, "Saturday", all_shifts)
+#
+# # Optimize for Friday
+# su_model = Model()
+# optimizer(all_stations, "Sunday", "su_model", load_max_hours("max_hours.txt"), all_shifts)
+# interpret_result(su_model, "Sunday", all_shifts)
