@@ -384,7 +384,8 @@ def interpret_result(model, day, all_shifts):
 # ---------- Setting up Data ---------- #
 # Setting up data for all stations
 plate = Station("Plate", load_hours("plate_hours.txt"),
-                load_shifts("plate_shifts.txt"), "-0.2 * x + 1.2")
+                load_shifts("plate_shifts.txt"), "-0.2 * x + 1")
+# -0.2 * x + 1.2
 quench = Station("Quench", load_hours("quench_hours.txt"),
                 load_shifts("quench_shifts.txt"), "-0.2 * x + 1.6")
 noodle = Station("Noodle", load_hours("noodle_hours.txt"),
@@ -392,9 +393,11 @@ noodle = Station("Noodle", load_hours("noodle_hours.txt"),
 select = Station("Select", load_hours("select_hours.txt"),
                 load_shifts("select_shifts.txt"), "-0.2 * x + 1")
 market = Station("Market", load_hours("market_hours.txt"),
-                load_shifts("market_shifts.txt"), "-0.1 * x + 1.5")
+                load_shifts("market_shifts.txt"), "-0.2 * x + 1.1")
+# -0.1 * x + 1.5
 seared = Station("Seared", load_hours("seared_hours.txt"),
-                load_shifts("seared_shifts.txt"), "-0.2 * x + 1.6")
+                load_shifts("seared_shifts.txt"), "-0.2 * x + 1")
+# -0.2 * x + 1.6
 
 # A map from name of the station in string to the station's data in an object
 all_stations = {"plate": plate, "quench": quench,

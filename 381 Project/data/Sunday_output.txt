@@ -17,15 +17,12 @@ Seared: 16:00 - 20:30
 Seared: 17:00 - 21:30
 Seared: 18:00 - 21:30
 Quench: 7:00 - 10:00
-Quench: 9:00 - 12:00
-Quench: 9:00 - 12:00
-Quench: 9:00 - 12:00
+Quench: 8:30 - 12:00
+Quench: 10:00 - 13:00
+Quench: 10:00 - 13:00
 Quench: 10:00 - 13:00
 Quench: 12:00 - 15:00
-Quench: 12:00 - 15:00
-Quench: 12:00 - 15:00
 Quench: 13:30 - 16:30
-Quench: 16:30 - 19:30
 Quench: 16:30 - 19:30
 Quench: 18:30 - 22:00
 Quench: 22:00 - 25:30
@@ -36,7 +33,9 @@ Market: 10:30 - 13:30
 Market: 11:30 - 14:30
 Market: 11:30 - 14:30
 Market: 11:30 - 14:30
-Market: 14:00 - 17:00
+Market: 14:30 - 18:00
+Market: 16:30 - 20:30
+Market: 16:30 - 20:30
 Market: 16:30 - 20:30
 Market: 18:00 - 21:30
 Total Hours: 133.5
