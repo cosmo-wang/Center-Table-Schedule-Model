@@ -7,6 +7,8 @@ Plate: 10:45 - 14:00
 Plate: 10:45 - 14:00
 Plate: 11:00 - 14:30
 Plate: 16:45 - 20:00
+Plate: 16:45 - 20:00
+Plate: 17:30 - 20:30
 Plate: 17:30 - 20:30
 Plate: 20:30 - 23:30
 Noodle: 16:45 - 20:30
@@ -16,13 +18,10 @@ Noodle: 17:00 - 21:00
 Seared: 16:00 - 20:30
 Seared: 16:00 - 20:30
 Seared: 16:00 - 20:30
-Seared: 17:00 - 21:30
+Seared: 18:00 - 21:30
 Quench: 7:00 - 10:00
-Quench: 9:00 - 12:00
-Quench: 10:00 - 13:00
 Quench: 10:00 - 13:00
 Quench: 11:30 - 14:00
-Quench: 12:00 - 15:00
 Quench: 13:30 - 16:30
 Quench: 16:30 - 19:30
 Quench: 18:30 - 22:00
@@ -33,9 +32,10 @@ Market: 8:00 - 11:00
 Market: 10:30 - 13:30
 Market: 11:30 - 14:30
 Market: 11:30 - 14:30
+Market: 11:30 - 14:30
 Market: 14:00 - 17:00
-Market: 14:00 - 17:00
+Market: 16:30 - 20:30
 Market: 16:30 - 20:30
 Market: 16:30 - 20:30
 Market: 18:00 - 21:30
-Total Hours: 133.25
+Total Hours: 133.5

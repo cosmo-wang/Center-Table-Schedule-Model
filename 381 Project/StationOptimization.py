@@ -426,14 +426,14 @@ def interpret_result(model, day, all_shifts):
 
 # ---------- Setting up Data ---------- #
 # Setting up data for all stations
-plate = Station("Plate", load_hours("plate_hours.txt"), load_shifts("plate_shifts.txt"), "-0.2 * x + 1", 20)
+plate = Station("Plate", load_hours("plate_hours.txt"), load_shifts("plate_shifts.txt"), "-0.2 * x + 1", 25)
 # -0.2 * x + 1.2
-quench = Station("Quench", load_hours("quench_hours.txt"), load_shifts("quench_shifts.txt"), "-0.2 * x + 1.6", 20)
-noodle = Station("Noodle", load_hours("noodle_hours.txt"), load_shifts("noodle_shifts.txt"), "-0.2 * x + 1.2", 20)
-select = Station("Select", load_hours("select_hours.txt"), load_shifts("select_shifts.txt"), "-0.2 * x + 1", 15)
-market = Station("Market", load_hours("market_hours.txt"), load_shifts("market_shifts.txt"), "-0.2 * x + 1.1", 20)
+quench = Station("Quench", load_hours("quench_hours.txt"), load_shifts("quench_shifts.txt"), "-0.2 * x + 1.6", 25)
+noodle = Station("Noodle", load_hours("noodle_hours.txt"), load_shifts("noodle_shifts.txt"), "-0.2 * x + 1.2", 25)
+select = Station("Select", load_hours("select_hours.txt"), load_shifts("select_shifts.txt"), "-0.2 * x + 1", 25)
+market = Station("Market", load_hours("market_hours.txt"), load_shifts("market_shifts.txt"), "-0.2 * x + 1.1", 25)
 # -0.1 * x + 1.5
-seared = Station("Seared", load_hours("seared_hours.txt"), load_shifts("seared_shifts.txt"), "-0.2 * x + 1", 20)
+seared = Station("Seared", load_hours("seared_hours.txt"), load_shifts("seared_shifts.txt"), "-0.2 * x + 1", 25)
 # -0.2 * x + 1.6
 
 # A map from name of the station in string to the station's data in an object
@@ -444,43 +444,43 @@ all_stations = {"plate": plate, "quench": quench,
 # ---------- Start Optimization ---------- #
 # Optimize for Monday
 # time list: [20, 20, 20, 15, 20, 20]
-# m_model = Model()
-# all_shifts = {}
-# optimizer(all_stations, "Monday", "m_model", load_max_hours("max_hours.txt"), all_shifts)
-# interpret_result(m_model, "Monday", all_shifts)
+m_model = Model()
+all_shifts = {}
+optimizer(all_stations, "Monday", "m_model", load_max_hours("max_hours.txt"), all_shifts)
+interpret_result(m_model, "Monday", all_shifts)
 
 # Optimize for Tuesday
 # time list: [15, 20, 20, 15, 20, 20]
-# t_model = Model()
-# optimizer(all_stations, "Tuesday", "t_model", load_max_hours("max_hours.txt"), all_shifts)
-# interpret_result(t_model, "Tuesday", all_shifts)
+t_model = Model()
+optimizer(all_stations, "Tuesday", "t_model", load_max_hours("max_hours.txt"), all_shifts)
+interpret_result(t_model, "Tuesday", all_shifts)
 #
 # Optimize for Wednesday
 # time list: [20, 20, 20, 15, 20, 20]
-# w_model = Model()
-# optimizer(all_stations, "Wednesday", "w_model", load_max_hours("max_hours.txt"), all_shifts)
-# interpret_result(w_model, "Wednesday", all_shifts)
+w_model = Model()
+optimizer(all_stations, "Wednesday", "w_model", load_max_hours("max_hours.txt"), all_shifts)
+interpret_result(w_model, "Wednesday", all_shifts)
 #
 # Optimize for Thursday
 # time list: [15, 20, 20, 15, 20, 20]
-# th_model = Model()
-# optimizer(all_stations, "Thursday", "th_model", load_max_hours("max_hours.txt"), all_shifts)
-# interpret_result(th_model, "Thursday", all_shifts)
+th_model = Model()
+optimizer(all_stations, "Thursday", "th_model", load_max_hours("max_hours.txt"), all_shifts)
+interpret_result(th_model, "Thursday", all_shifts)
 
 # # Optimize for Friday
 # time list: [20, 25, 20, 15, 20, 25]
-# f_model = Model()
-# optimizer(all_stations, "Friday", "f_model", load_max_hours("max_hours.txt"), all_shifts)
-# interpret_result(f_model, "Friday", all_shifts)
+f_model = Model()
+optimizer(all_stations, "Friday", "f_model", load_max_hours("max_hours.txt"), all_shifts)
+interpret_result(f_model, "Friday", all_shifts)
 #
 # Optimize for Saturday
 # time list: [20, 20, x, x 20, 15]
-# sa_model = Model()
-# optimizer(all_stations, "Saturday", "sa_model", load_max_hours("max_hours.txt"), all_shifts)
-# interpret_result(sa_model, "Saturday", all_shifts)
+sa_model = Model()
+optimizer(all_stations, "Saturday", "sa_model", load_max_hours("max_hours.txt"), all_shifts)
+interpret_result(sa_model, "Saturday", all_shifts)
 #
 # Optimize for Sunday
 # time list: [20, 20, 15, 10, 15, 15]
-# su_model = Model()
-# optimizer(all_stations, "Sunday", "su_model", load_max_hours("max_hours.txt"), all_shifts)
-# interpret_result(su_model, "Sunday", all_shifts)
+su_model = Model()
+optimizer(all_stations, "Sunday", "su_model", load_max_hours("max_hours.txt"), all_shifts)
+interpret_result(su_model, "Sunday", all_shifts)
