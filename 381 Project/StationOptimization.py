@@ -401,7 +401,7 @@ def optimizer(stations, day, model_name, max_hours, all_shifts):
 
 def interpret_result(model, day, all_shifts):
     """
-    Interpret the result and write the result to text file.
+    Interpret the result and write the result to text file
     :param model: model with variables and constraints added
     :param day: day of a week of interest
     :param all_shifts: map from index to a shift
