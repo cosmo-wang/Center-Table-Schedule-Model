@@ -1,0 +1,7 @@
+Monday:7,25
+Tuesday:7,25
+Wednesday:7,25
+Thursday:7,25
+Friday:7,21
+Saturday:8,21
+Sunday:8,25

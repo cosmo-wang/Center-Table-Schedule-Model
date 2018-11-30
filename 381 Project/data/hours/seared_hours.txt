@@ -1,0 +1,7 @@
+Monday:11,14    16,21
+Tuesday:11,14   16,21
+Wednesday:11,14 16,21
+Thursday:11,14  16,21
+Friday:11,14    16,21
+Saturday:16,21
+Sunday:16,21

@@ -68,7 +68,7 @@ def load_prob(dict_list, filename):
                       Each dictionary maps a time to a probability
     :param filename: name of the file storing the data
     """
-    prob = open("data/" + filename)
+    prob = open("data/probs/" + filename)
     i = 0
     for line in prob:
         if not line.startswith("#"):
@@ -87,7 +87,7 @@ def load_customer_count(filename):
     :return: a dictionary maps from time of a day to number of customers coming in at that time
     """
     customer_count = {}
-    data = open("data/" + filename)
+    data = open("data/counts/" + filename)
     i = 0
     for line in data:
         if not line.startswith("#"):
@@ -105,7 +105,7 @@ def load_hours(filename):
                  throughout the day. Each period of opening hours is a tuple in the form: (open_time, close_time)
     """
     hours = {}
-    data = open("data/" + filename)
+    data = open("data/hours/" + filename)
     for line in data:
         if not line.startswith("#"):
             day = line.split(":")[0]
@@ -125,7 +125,7 @@ def load_shifts(filename):
     :return: a list of shifts. Shifts are represented by tuples in the form: (start_time, end_time)
     """
     shifts = []
-    data = open("data/" + filename)
+    data = open("data/shifts/" + filename)
     for line in data:
         if not line.startswith("#"):
             shift = line.rstrip().split(",")
@@ -410,7 +410,7 @@ def interpret_result(model, day, all_shifts):
     # model.computeIIS()
     # model.write("model.ilp")
     # model.write("model.lp")
-    output = open("data/" + day + "_output.txt", "w")
+    output = open("data/Outputs/" + day + "_output.txt", "w")
     hours_sum = 0
     for var in model.getVars():
         index = int(var.varName[1:])
